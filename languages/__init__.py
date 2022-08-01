@@ -1,0 +1,1 @@
+from languages.translate import BOT_LANGUAGE
