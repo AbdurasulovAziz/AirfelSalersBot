@@ -21,8 +21,7 @@ async def main_keyboard(message: types.Message, state: FSMContext):
                types.KeyboardButton(LANGUAGE[data['lang']]['MyAccount']),
                types.KeyboardButton(LANGUAGE[data['lang']]['MyHistory']),
                types.KeyboardButton(LANGUAGE[data['lang']]['Prizes']),
-               types.KeyboardButton(LANGUAGE[data['lang']]['ChangeLang']),
-               types.KeyboardButton(LANGUAGE[data['lang']]['ReReg'])]
+               types.KeyboardButton(LANGUAGE[data['lang']]['ChangeLang'])]
     keyboard.add(*buttons)
     if admin_id['status'] != 'left':
         keyboard.add(types.KeyboardButton(LANGUAGE[data['lang']]['AdminPanel_keyboard']))

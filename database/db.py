@@ -78,7 +78,7 @@ class AdminData:
     def get_history():
         cnx, cur = create_connection()
         cur.execute(
-            f'''SELECT users.fio, datatime, points
+            f'''SELECT users.fio, users.phone, datatime, points
             FROM history
             INNER JOIN users ON history.user_id = users.id''')
         data = cur.fetchall()

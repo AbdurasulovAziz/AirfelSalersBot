@@ -32,15 +32,10 @@ async def get_info(message: types.Message, state: FSMContext):
     master = SalerData.get_user(message.from_user.id)
     text = f'''{LANGUAGE[data['lang']]['Name']} {master[1]}\n{LANGUAGE[data['lang']]['Phone']} {master[2]}\n{LANGUAGE[data['lang']]['Points']} {master[3]}'''
     await message.answer(text)
-    #@dp.message_handler(lambda message: message.text == 'Мои баллы' or message.text == 'Менинг балларим')
-    # async def get_points(message: types.Message):
-    #     data = await state.get_data()
-    #     saler_data = SalerData.get_user(message.from_user.id)
-    #     text = f"{LANGUAGE[data['lang']]['Points']} {saler_data[3]}"
-    #     await message.answer(text)
 
 @dp.message_handler(lambda message: message.text == 'Моя история' or message.text == 'Менинг тарихим')
-async def get_history(message: types.Message):
+async def get_history(message: types.Message, state: FSMContext):
+    data = await state.get_data()
     saler_history = SalerData.get_history(message.from_user.id)
     try:
         x, y = 0, 5
@@ -50,7 +45,7 @@ async def get_history(message: types.Message):
         else:
             await message.answer(list_to_text(x, y, saler_history), reply_markup=keyboard)
     except MessageTextIsEmpty:
-        await message.answer('Ваша история пока что пуста')
+        await message.answer(LANGUAGE[data['lang']]['EmptyHistory'])
 
     @dp.callback_query_handler(regexp=('(.+)_(.+)_(.+)'))
     async def histor(call: types.CallbackQuery):
@@ -90,16 +85,10 @@ async def get_history(message: types.Message):
                 callback[2] -= 5
                 await call.message.edit_text(
                     list_to_text(callback[1], callback[2], saler_history),
-                    reply_markup=history_keyboard(callback[1],callback[2])
+                    reply_markup=history_keyboard(callback[1], callback[2])
                 )
 
         await call.answer()
-
-
-@dp.message_handler(lambda message: message.text == 'Бошқатдан рўйхатдан ўтиш🔄' or
-                                    message.text == 'Зарегистрироваться заново🔄')
-async def update_info(message: types.Message):
-    await SalerRegistration.start(message)
 
 
 @dp.message_handler(lambda message: message.text == 'Карточканинг суратини жўнатинг' or
@@ -108,7 +97,7 @@ async def send_photo(message: types.Message, state: FSMContext):
     await BoilerRegistration.start(message, state)
 
 
-@dp.message_handler(lambda message: message.text == 'Призы' or message.text == 'Sovrinlar')
+@dp.message_handler(lambda message: message.text == 'Призы' or message.text == 'Совринлар')
 async def get_prizes(message: types.Message):
     photo = open('images/image.png', 'rb')
     await bot.send_photo(chat_id=message.chat.id, photo=photo)

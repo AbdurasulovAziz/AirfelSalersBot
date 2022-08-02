@@ -25,6 +25,7 @@ class BoilerRegistration(BoilerInfo):
         data = await state.get_data()
         caption = f"{LANGUAGE[data['lang']]['Saler']} {saler_data[1]}\n" \
                   f"{LANGUAGE[data['lang']]['SalerPhone']} {saler_data[2]}"
+        await message.answer(LANGUAGE[data['lang']]['WaitPls'])
         await bot.send_photo('-1001552354835', data['photo'], caption=caption,
                              reply_markup=await sendAdmin_keyboard(message.from_user.id, data["lang"]))
         await main_keyboard(message, state)
