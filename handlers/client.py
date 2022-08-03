@@ -116,7 +116,7 @@ async def get_data(message: types.Message, state: FSMContext):
         for i in saler_data:
             arr = []
             for j in i:
-                arr.append(str(j))
+                arr.append(j)
             array.append(arr)
         array = pd.DataFrame(array, columns=columns)
         array.to_excel('database/Маълумотлар.xlsx', index=False)
@@ -129,7 +129,7 @@ async def get_data(message: types.Message, state: FSMContext):
     @dp.message_handler(lambda message: message.text == 'Получить историю' or message.text == 'Тарихни кўриш')
     async def get_history(message: types.Message):
         history_data = AdminData.get_history()
-        columns = ['Name', 'Time', 'Points']
+        columns = ['Name', 'Phone', 'Time', 'Points']
         array = []
         for i in history_data:
             arr = []
