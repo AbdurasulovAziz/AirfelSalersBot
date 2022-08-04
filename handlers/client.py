@@ -91,7 +91,7 @@ async def get_history(message: types.Message, state: FSMContext):
 
             await call.answer()
         except MessageTextIsEmpty:
-            await SalerRegistration.start(message)
+            await get_history(message, state)
 
 @dp.message_handler(lambda message: message.text == 'Карточканинг суратини жўнатинг' or
                                     message.text == 'Отправить фотографию карточки')
