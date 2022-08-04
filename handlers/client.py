@@ -49,47 +49,49 @@ async def get_history(message: types.Message, state: FSMContext):
 
     @dp.callback_query_handler(regexp=('(.+)_(.+)_(.+)'))
     async def histor(call: types.CallbackQuery):
-        saler_history = SalerData.get_history(message.from_user.id)
-        callback = []
+        try:
+            saler_history = SalerData.get_history(message.from_user.id)
+            callback = []
 
-        for i in call.data.split('_'):
-            try:
-                callback.append(int(i))
-            except ValueError:
-                callback.append(i)
+            for i in call.data.split('_'):
+                try:
+                    callback.append(int(i))
+                except ValueError:
+                    callback.append(i)
 
-        if callback[0] == '>>':
-            callback[1] += 5
-            callback[2] += 5
+            if callback[0] == '>>':
+                callback[1] += 5
+                callback[2] += 5
 
-            if callback[2] >= len(saler_history):
-                keyboard = types.InlineKeyboardMarkup().add(
-                    types.InlineKeyboardButton('<<', callback_data=f'<<_{callback[1]}_{callback[2]}'))
-                await call.message.edit_text(
-                    list_to_text(callback[2]-5, len(saler_history), saler_history), reply_markup=keyboard)
-            else:
-                await call.message.edit_text(
-                    list_to_text(
-                        callback[1], callback[2], saler_history), reply_markup=history_keyboard(callback[1], callback[2]))
+                if callback[2] >= len(saler_history):
+                    keyboard = types.InlineKeyboardMarkup().add(
+                        types.InlineKeyboardButton('<<', callback_data=f'<<_{callback[1]}_{callback[2]}'))
+                    await call.message.edit_text(
+                        list_to_text(callback[2]-5, len(saler_history), saler_history), reply_markup=keyboard)
+                else:
+                    await call.message.edit_text(
+                        list_to_text(
+                            callback[1], callback[2], saler_history), reply_markup=history_keyboard(callback[1], callback[2]))
 
-        elif callback[0] == '<<':
+            elif callback[0] == '<<':
 
-            if (callback[1]-5) <= 0:
-                callback[1], callback[2] = 0, 5
-                keyboard = types.InlineKeyboardMarkup().add(
-                    types.InlineKeyboardButton('>>', callback_data=f'>>_{callback[1]}_{callback[2]}'))
-                await call.message.edit_text(
-                    list_to_text(callback[1], callback[2], saler_history), reply_markup=keyboard)
-            else:
-                callback[1] -= 5
-                callback[2] -= 5
-                await call.message.edit_text(
-                    list_to_text(callback[1], callback[2], saler_history),
-                    reply_markup=history_keyboard(callback[1], callback[2])
-                )
+                if (callback[1]-5) <= 0:
+                    callback[1], callback[2] = 0, 5
+                    keyboard = types.InlineKeyboardMarkup().add(
+                        types.InlineKeyboardButton('>>', callback_data=f'>>_{callback[1]}_{callback[2]}'))
+                    await call.message.edit_text(
+                        list_to_text(callback[1], callback[2], saler_history), reply_markup=keyboard)
+                else:
+                    callback[1] -= 5
+                    callback[2] -= 5
+                    await call.message.edit_text(
+                        list_to_text(callback[1], callback[2], saler_history),
+                        reply_markup=history_keyboard(callback[1], callback[2])
+                    )
 
-        await call.answer()
-
+            await call.answer()
+        except MessageTextIsEmpty:
+            await SalerRegistration.start(message)
 
 @dp.message_handler(lambda message: message.text == 'Карточканинг суратини жўнатинг' or
                                     message.text == 'Отправить фотографию карточки')
