@@ -68,6 +68,7 @@ class Points(SalerPoint):
                 await state.reset_state(with_data=False)
             else:
                 await message.answer(LANGUAGE[data['lang']]['MaxDigEr'])
+                await SalerPoint.points.set()
         else:
             await message.answer(LANGUAGE[data['lang']]['SendDig'])
             await SalerPoint.points.set()
