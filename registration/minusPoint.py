@@ -54,17 +54,20 @@ class Points(SalerPoint):
 
     @dp.message_handler(state=SalerPoint.points)
     async def __get_points(message:types.Message, state: FSMContext):
+        data = await state.get_data()
         if message.text.isdigit():
-            await state.update_data(points=int(message.text))
-            data = await state.get_data()
-            if data['plus_or_minus'] == 'plus':
-                SalerData.plus_user_point(data['saler_phone'], data['points'])
-            elif data['plus_or_minus'] == 'minus':
-                SalerData.minus_user_point(data['saler_phone'], data['points'])
-            await message.answer(LANGUAGE[data['lang']]['SalerUpdated'])
-            await main_keyboard(message, state)
-            await state.reset_state(with_data=False)
+            if len(message.text) <= 4 :
+                await state.update_data(points=int(message.text))
+                data = await state.get_data()
+                if data['plus_or_minus'] == 'plus':
+                    SalerData.plus_user_point(data['saler_phone'], data['points'])
+                elif data['plus_or_minus'] == 'minus':
+                    SalerData.minus_user_point(data['saler_phone'], data['points'])
+                await message.answer(LANGUAGE[data['lang']]['SalerUpdated'])
+                await main_keyboard(message, state)
+                await state.reset_state(with_data=False)
+            else:
+                await message.answer(LANGUAGE[data['lang']]['MaxDigEr'])
         else:
-            data = await state.get_data()
             await message.answer(LANGUAGE[data['lang']]['SendDig'])
             await SalerPoint.points.set()
