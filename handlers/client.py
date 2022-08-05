@@ -123,7 +123,7 @@ async def get_data(message: types.Message, state: FSMContext):
         array.to_excel('database/Маълумотлар.xlsx', index=False)
         await message.reply_document(open('database/Маълумотлар.xlsx', 'rb'))
 
-    @dp.message_handler(lambda message: message.text == 'Балларни айириш' or message.text == 'Отнять баллы')
+    @dp.message_handler(lambda message: message.text == 'Баллы' or message.text == 'Баллар')
     async def minusPoint(message: types.Message, state: FSMContext):
         await Points.take_points(message, state)
 

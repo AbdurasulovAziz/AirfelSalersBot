@@ -42,7 +42,7 @@ async def admin_keyboard(state:FSMContext):
     data = await state.get_data()
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     buttons = [types.KeyboardButton(LANGUAGE[data['lang']]['GetData']),
-               types.KeyboardButton(LANGUAGE[data['lang']]['MinusPoint_keyboard']),
+               types.KeyboardButton(LANGUAGE[data['lang']]['Point_keyboard']),
                types.KeyboardButton(LANGUAGE[data['lang']]['GetHistory']),
                types.KeyboardButton(LANGUAGE[data['lang']]['Back'])]
     keyboard.add(*buttons)

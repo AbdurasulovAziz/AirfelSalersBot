@@ -8,7 +8,7 @@ from keyboards import main_keyboard, sendAdmin_keyboard
 
 class BoilerInfo(StatesGroup):
     photo = State()
-    
+
 
 class BoilerRegistration(BoilerInfo):
 
@@ -17,7 +17,7 @@ class BoilerRegistration(BoilerInfo):
         await bot.send_message(chat_id=message.from_user.id, text=LANGUAGE[data['lang']]['SendSticker'],
                                reply_markup=types.ReplyKeyboardRemove())
         await BoilerInfo.photo.set()
-    
+
     @dp.message_handler(content_types='photo', state=BoilerInfo.photo)
     async def __get_photo(message: types.Message, state: FSMContext):
         await state.update_data(photo=message.photo[-1].file_id)
@@ -46,10 +46,7 @@ class BoilerRegistration(BoilerInfo):
             await call.message.edit_reply_markup(reply_markup=None)
             await call.message.edit_caption(f'{caption}\n{LANGUAGE["У́збекча"]["Declined"]}')
         await call.answer()
+            
 
-            
-        
-        
-            
-            
-            
+
+

@@ -57,6 +57,16 @@ class SalerData:
         cnx.commit()
         cnx.close()
 
+    @classmethod
+    def plus_user_point(cls, phone, points):
+        cnx, cur = create_connection()
+        saler_id = cls.get_user_id_by_phone(phone)
+        cur.execute(f'''UPDATE users SET `point` = `point` + {points} WHERE `phone` = '{phone}' ''')
+        cur.execute(
+            f'''INSERT INTO history(`datatime`, `points`, `user_id`) VALUES (NOW()+ INTERVAL 3 HOUR,'-{points}', {saler_id})''')
+        cnx.commit()
+        cnx.close()
+
     @staticmethod
     def update_user(saler_id, fio, phone):
         cnx, cur = create_connection()
