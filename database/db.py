@@ -63,7 +63,7 @@ class SalerData:
         saler_id = cls.get_user_id_by_phone(phone)
         cur.execute(f'''UPDATE users SET `point` = `point` + {points} WHERE `phone` = '{phone}' ''')
         cur.execute(
-            f'''INSERT INTO history(`datatime`, `points`, `user_id`) VALUES (NOW()+ INTERVAL 3 HOUR,'-{points}', {saler_id})''')
+            f'''INSERT INTO history(`datatime`, `points`, `user_id`) VALUES (NOW()+ INTERVAL 3 HOUR,'+{points}', {saler_id})''')
         cnx.commit()
         cnx.close()
 
