@@ -144,7 +144,7 @@ async def get_data(message: types.Message, state: FSMContext):
         for i in history_data:
             arr = []
             for j in i:
-                arr.append(str(j))
+                arr.append(j)
             array.append(arr)
         array = pd.DataFrame(array, columns=columns)
         array.to_excel('database/Tarix.xlsx', index=False)
