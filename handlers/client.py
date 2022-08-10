@@ -1,7 +1,7 @@
 from aiogram import Dispatcher, types
 from aiogram.utils.exceptions import MessageTextIsEmpty
 from bot_create import dp, LANGUAGE, bot
-from registration import SalerRegistration, BoilerRegistration, Points, Language
+from registration import SalerRegistration, BoilerRegistration, Points, Language, Mail
 from keyboards import main_keyboard, admin_keyboard, history_keyboard
 from database import SalerData, AdminData
 from aiogram.dispatcher import FSMContext
@@ -128,10 +128,11 @@ async def get_data(message: types.Message, state: FSMContext):
         array.to_excel('database/Маълумотлар.xlsx', index=False)
         await message.reply_document(open('database/Маълумотлар.xlsx', 'rb'))
 
-    @dp.message_handler(lambda message: message.text == 'Сделать рассылку')
-    async def sendall(message: types.Message, state: FSMContext):
-        users_id = SalerData.get_users_id()
-        await message.answer(users_id)
+    @dp.message_handler(lambda message: message.text == 'Сделать рассылку' or message.text == 'Хабарнома жу́натиш')
+    async def sendall(message: types.Message, state:FSMContext):
+        await Mail.mail_start(message, state)
+
+
 
     @dp.message_handler(lambda message: message.text == 'Баллы' or message.text == 'Баллар')
     async def minusPoint(message: types.Message, state: FSMContext):

@@ -44,7 +44,7 @@ async def admin_keyboard(state:FSMContext):
     buttons = [types.KeyboardButton(LANGUAGE[data['lang']]['GetData']),
                types.KeyboardButton(LANGUAGE[data['lang']]['GetHistory']),
                types.KeyboardButton(LANGUAGE[data['lang']]['Point_keyboard']),
-               types.KeyboardButton('Сделать рассылку'),
+               types.KeyboardButton(LANGUAGE[data['lang']]['Mailing']),
                types.KeyboardButton(LANGUAGE[data['lang']]['Back'])]
     keyboard.add(*buttons)
     return keyboard
