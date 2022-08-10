@@ -131,7 +131,7 @@ async def get_data(message: types.Message, state: FSMContext):
     @dp.message_handler(lambda message: message.text == 'Сделать рассылку')
     async def sendall(message: types.Message, state: FSMContext):
         users_id = SalerData.get_users_id()
-        print(users_id)
+        await message.answer(users_id)
 
     @dp.message_handler(lambda message: message.text == 'Баллы' or message.text == 'Баллар')
     async def minusPoint(message: types.Message, state: FSMContext):
