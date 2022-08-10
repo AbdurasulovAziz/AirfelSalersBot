@@ -10,20 +10,25 @@ import pandas as pd
 
 @dp.message_handler(commands='start')
 async def start(message: types.Message, state: FSMContext):
-    try:
-        data = await state.get_data()
-        saler_data = SalerData.get_user(message.from_user.id)
-        if saler_data is None:
-            await SalerRegistration.start(message)
-        else:
-            try:
-                await message.answer(LANGUAGE[data['lang']]['SelectNextDo'])
-                await main_keyboard(message, state)
-            except KeyError:
+    if message.chat.id == -1001552354835:
+        await bot.send_message(chat_id=-1001552354835,
+                               text='Нельзя использовать бота в группе',
+                               reply_markup=types.ReplyKeyboardRemove())
+    else:
+        try:
+            data = await state.get_data()
+            saler_data = SalerData.get_user(message.from_user.id)
+            if saler_data is None:
                 await SalerRegistration.start(message)
-    except TypeError:
-        await message.answer('Бот уже запущен')
-        await main_keyboard(message, state)
+            else:
+                try:
+                    await message.answer(LANGUAGE[data['lang']]['SelectNextDo'])
+                    await main_keyboard(message, state)
+                except KeyError:
+                    await SalerRegistration.start(message)
+        except TypeError:
+            await message.answer('Бот уже запущен')
+            await main_keyboard(message, state)
 
 
 @dp.message_handler(lambda message: message.text == 'Менинг анкетам👨🏻‍💼' or message.text == 'Моя анкета👨🏻‍💼')
@@ -123,6 +128,11 @@ async def get_data(message: types.Message, state: FSMContext):
         array.to_excel('database/Маълумотлар.xlsx', index=False)
         await message.reply_document(open('database/Маълумотлар.xlsx', 'rb'))
 
+    @dp.message_handler(lambda message: message.text == 'Сделать рассылку')
+    async def sendall(message: types.Message, state: FSMContext):
+        users_id = SalerData.get_users_id()
+        print(users_id)
+
     @dp.message_handler(lambda message: message.text == 'Баллы' or message.text == 'Баллар')
     async def minusPoint(message: types.Message, state: FSMContext):
         await Points.take_points(message, state)
@@ -150,7 +160,10 @@ async def get_data(message: types.Message, state: FSMContext):
 async def change_lang(message: types.Message):
     await Language.change_language(message)
 
-
+@dp.errors_handler(exception=KeyError)
+async def key_error_exception(update: types.Update, error):
+    await update.message.answer('Введите /start')
+    return True
 
 
 def list_to_text(x, y, list):

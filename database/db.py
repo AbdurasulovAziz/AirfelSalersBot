@@ -12,6 +12,14 @@ class SalerData:
         cnx.close()
 
     @staticmethod
+    def get_users_id():
+        cnx, cur = create_connection()
+        cur.execute(f'''SELECT id FROM users''')
+        data = cur.fetchall()
+        cnx.close()
+        return data
+
+    @staticmethod
     def get_user(saler_id):
         cnx, cur = create_connection()
         cur.execute(
