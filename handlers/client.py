@@ -50,7 +50,7 @@ async def get_history(message: types.Message, state: FSMContext):
     @dp.callback_query_handler(regexp=('(.+)_(.+)_(.+)'))
     async def histor(call: types.CallbackQuery):
 
-        saler_history = SalerData.get_history(message.from_user.id)
+        saler_history = SalerData.get_history(call.from_user.id)
         callback = []
 
         for i in call.data.split('_'):
