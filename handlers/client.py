@@ -12,17 +12,15 @@ import pandas as pd
 async def start(message: types.Message, state: FSMContext):
     if message.chat.id == -1001552354835:
         await bot.send_message(chat_id=-1001552354835,
-                               text='Нельзя использовать бота в группе',
+                               text='Нельзя использовать бота в группе!\nБотдан гурухда фойдаланиш мумкин эмас!',
                                reply_markup=types.ReplyKeyboardRemove())
     else:
         try:
-            data = await state.get_data()
             saler_data = SalerData.get_user(message.from_user.id)
             if saler_data is None:
                 await SalerRegistration.start(message)
             else:
                 try:
-                    await message.answer(LANGUAGE[data['lang']]['SelectNextDo'])
                     await main_keyboard(message, state)
                 except KeyError:
                     await SalerRegistration.start(message)
@@ -163,7 +161,7 @@ async def change_lang(message: types.Message):
 
 @dp.errors_handler(exception=KeyError)
 async def key_error_exception(update: types.Update, error):
-    await update.message.answer('Введите /start')
+    await update.message.answer('Введите /start\n/start тугмасини босинг')
     return True
 
 
