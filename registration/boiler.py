@@ -18,22 +18,21 @@ class BoilerRegistration(BoilerInfo):
                                reply_markup=types.ReplyKeyboardRemove())
         await BoilerInfo.photo.set()
 
-    @dp.message_handler(content_types='photo', state=BoilerInfo.photo)
+    @dp.message_handler(content_types=types.ContentType.ANY, state=BoilerInfo.photo)
     async def __get_photo(message: types.Message, state: FSMContext):
         data = await state.get_data()
         if message.content_type == 'photo':
-            await message.answer(f"{LANGUAGE[data['lang']]['SendSticker']}")
-            #await BoilerInfo.photo.set()
-        #else:
-            await state.update_data(photo=message.photo[-1].file_id)
             saler_data = SalerData.get_user(message.from_user.id)
             caption = f"{LANGUAGE[data['lang']]['Saler']} {saler_data[1]}\n" \
                       f"{LANGUAGE[data['lang']]['SalerPhone']} {saler_data[2]}"
             await message.answer(LANGUAGE[data['lang']]['WaitPls'])
-            await bot.send_photo('-1001552354835', data['photo'], caption=caption,
+            await bot.send_photo('-1001552354835', message.photo[-1].file_id, caption=caption,
                                  reply_markup=await sendAdmin_keyboard(message.from_user.id, data["lang"]))
             await state.reset_state(with_data=False)
             await main_keyboard(message, state)
+        else:
+            await message.answer(f"{LANGUAGE[data['lang']]['SendSticker']}")
+            await BoilerInfo.photo.set()
 
     @dp.callback_query_handler(regexp='(.+)-(.+)-(.+)')
     async def accept(call: types.CallbackQuery):
@@ -50,7 +49,3 @@ class BoilerRegistration(BoilerInfo):
             await call.message.edit_reply_markup(reply_markup=None)
             await call.message.edit_caption(f'{caption}\n{LANGUAGE["У́збекча"]["Declined"]}')
         await call.answer()
-            
-
-
-
