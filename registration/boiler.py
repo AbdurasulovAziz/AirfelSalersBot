@@ -21,9 +21,10 @@ class BoilerRegistration(BoilerInfo):
     @dp.message_handler(content_types='photo', state=BoilerInfo.photo)
     async def __get_photo(message: types.Message, state: FSMContext):
         data = await state.get_data()
-        if message.content_type != 'photo':
+        if message.content_type == 'photo':
             await message.answer(f"{LANGUAGE[data['lang']]['SendSticker']}")
-        else:
+            #await BoilerInfo.photo.set()
+        #else:
             await state.update_data(photo=message.photo[-1].file_id)
             saler_data = SalerData.get_user(message.from_user.id)
             caption = f"{LANGUAGE[data['lang']]['Saler']} {saler_data[1]}\n" \
@@ -31,8 +32,8 @@ class BoilerRegistration(BoilerInfo):
             await message.answer(LANGUAGE[data['lang']]['WaitPls'])
             await bot.send_photo('-1001552354835', data['photo'], caption=caption,
                                  reply_markup=await sendAdmin_keyboard(message.from_user.id, data["lang"]))
-            await main_keyboard(message, state)
             await state.reset_state(with_data=False)
+            await main_keyboard(message, state)
 
     @dp.callback_query_handler(regexp='(.+)-(.+)-(.+)')
     async def accept(call: types.CallbackQuery):
