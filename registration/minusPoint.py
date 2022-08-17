@@ -56,7 +56,7 @@ class Points(SalerPoint):
     async def __get_points(message:types.Message, state: FSMContext):
         data = await state.get_data()
         if message.text.isdigit():
-            if len(message.text) <= 4 :
+            if len(message.text) <= 4:
                 await state.update_data(points=int(message.text))
                 data = await state.get_data()
                 if data['plus_or_minus'] == 'plus':
