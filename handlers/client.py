@@ -159,18 +159,18 @@ async def get_data(message: types.Message, state: FSMContext):
 async def change_lang(message: types.Message):
     await Language.change_language(message)
 
-# @dp.errors_handler(exception=KeyError)
-# async def key_error_exception(update: types.Update, error):
-#     await update.message.answer('Введите /start\n/start тугмасини босинг')
-#     return True
-#
-#
-# def list_to_text(x, y, list):
-#     new_list = list[x:y]
-#     text = ''
-#     for i in new_list:
-#         text += i + '\n'
-#     return text
+@dp.errors_handler(exception=KeyError)
+async def key_error_exception(update: types.Update, error):
+    await update.message.answer('Введите /start\n/start тугмасини босинг')
+    return True
+
+
+def list_to_text(x, y, list):
+    new_list = list[x:y]
+    text = ''
+    for i in new_list:
+        text += i + '\n'
+    return text
 
 
 
