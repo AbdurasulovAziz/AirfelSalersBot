@@ -15,7 +15,7 @@ async def get_phone_keyboard(state:FSMContext):
 
 async def main_keyboard(message: types.Message, state: FSMContext):
     data = await state.get_data()
-    admin_id = await bot.get_chat_member(chat_id='-1001552354835', user_id=message.from_user.id)
+    admin_id = await bot.get_chat_member(chat_id=-1001552354835, user_id=message.from_user.id)
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
     buttons = [types.KeyboardButton(LANGUAGE[data['lang']]['RegCard']),
                types.KeyboardButton(LANGUAGE[data['lang']]['MyAccount']),
