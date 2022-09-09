@@ -43,6 +43,8 @@ class BoilerRegistration(BoilerInfo):
         saler_data = SalerData.get_user(callback[1])
         caption = f'''{LANGUAGE['У́збекча']['Saler']} {saler_data[1]}\n{LANGUAGE['У́збекча']['SalerPhone']} {saler_data[2]}'''
         if callback[0] == 'Accept':
+            await call.message.edit_reply_markup(reply_markup=None)
+
             imgname = f'{(datetime.now() + timedelta(hours=3)).strftime("%Y_%m_%d %H_%M_%S")} {saler_data[2]}.png'
             await call.message.photo[-1].download(f'registration/yadiskIMG/{imgname}')
 
@@ -52,7 +54,7 @@ class BoilerRegistration(BoilerInfo):
             os.remove(f'registration/yadiskIMG/{imgname}')
 
             SalerData.update_user_point(callback[1])
-            await call.message.edit_reply_markup(reply_markup=None)
+
             await call.message.edit_caption(f'{caption}\n{LANGUAGE["У́збекча"]["Accepted"]}')
             await bot.send_message(chat_id=callback[1], text=LANGUAGE[callback[2]]['YourAccepted'])
         elif callback[0] == 'Decline':
