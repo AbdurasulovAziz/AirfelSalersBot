@@ -1,6 +1,6 @@
 from aiogram import Dispatcher, types
 from aiogram.utils.exceptions import MessageTextIsEmpty
-from bot_create import dp, LANGUAGE, bot
+from bot_create import dp, LANGUAGE, bot, admin_chat
 from registration import SalerRegistration, BoilerRegistration, Points, Language, Mail
 from keyboards import main_keyboard, admin_keyboard, history_keyboard
 from database import SalerData, AdminData
@@ -10,8 +10,8 @@ import pandas as pd
 
 @dp.message_handler(commands='start')
 async def start(message: types.Message, state: FSMContext):
-    if message.chat.id == -1001552354835:
-        await bot.send_message(chat_id=-1001552354835,
+    if message.chat.id == admin_chat:
+        await bot.send_message(chat_id=admin_chat,
                                text='Нельзя использовать бота в группе!\nБотдан гурухда фойдаланиш мумкин эмас!',
                                reply_markup=types.ReplyKeyboardRemove())
     else:
@@ -28,6 +28,11 @@ async def start(message: types.Message, state: FSMContext):
             await message.answer('Бот уже запущен')
             await main_keyboard(message, state)
 
+@dp.message_handler(content_types='photo')
+async def photo_message(message:types.Message, state:FSMContext):
+    data = await state.get_data()
+    await message.answer(LANGUAGE[data['lang']]['FromKeyb'])
+
 
 @dp.message_handler(lambda message: message.text == 'Менинг анкетам👨🏻‍💼' or message.text == 'Моя анкета👨🏻‍💼')
 async def get_info(message: types.Message, state: FSMContext):
@@ -35,6 +40,7 @@ async def get_info(message: types.Message, state: FSMContext):
     master = SalerData.get_user(message.from_user.id)
     text = f'''{LANGUAGE[data['lang']]['Name']} {master[1]}\n{LANGUAGE[data['lang']]['Phone']} {master[2]}\n{LANGUAGE[data['lang']]['Points']} {master[3]}'''
     await message.answer(text)
+
 
 @dp.message_handler(lambda message: message.text == 'Моя история' or message.text == 'Менинг тарихим')
 async def get_history(message: types.Message, state: FSMContext):

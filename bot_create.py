@@ -6,6 +6,8 @@ dotenv = dict(dotenv_values('.env'))
 
 storage = MemoryStorage()
 
+admin_chat = -1001552354835
+
 LANGUAGE=BOT_LANGUAGE
 
 

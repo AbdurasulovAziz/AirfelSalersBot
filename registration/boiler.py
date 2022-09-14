@@ -1,4 +1,4 @@
-from bot_create import dp, bot, LANGUAGE
+from bot_create import dp, bot, LANGUAGE, admin_chat
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import StatesGroup, State
@@ -28,7 +28,7 @@ class BoilerRegistration(BoilerInfo):
             caption = f"{LANGUAGE[data['lang']]['Saler']} {saler_data[1]}\n" \
                       f"{LANGUAGE[data['lang']]['SalerPhone']} {saler_data[2]}"
             await message.answer(LANGUAGE[data['lang']]['WaitPls'])
-            await bot.send_photo(-1001552354835, message.photo[-1].file_id, caption=caption,
+            await bot.send_photo(admin_chat, message.photo[-1].file_id, caption=caption,
                                  reply_markup=await sendAdmin_keyboard(message.from_user.id, data["lang"]))
             await state.reset_state(with_data=False)
             await main_keyboard(message, state)
